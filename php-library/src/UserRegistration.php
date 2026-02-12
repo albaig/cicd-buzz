@@ -178,15 +178,25 @@ class UserRegistration {
      * @return array Response with status and message
      */
     public function startPhoneVerification($userId, $phoneNumber) {
-        // Validate phone number (basic validation)
-        $phoneNumber = preg_replace('/[^0-9+]/', '', $phoneNumber);
+        // Validate phone number
+        $phoneNumber = trim($phoneNumber);
         
-        if (strlen($phoneNumber) < 10) {
+        // Remove all characters except digits and +
+        $cleanedNumber = preg_replace('/[^0-9+]/', '', $phoneNumber);
+        
+        // Validate format:
+        // - Must start with + or digit
+        // - Only one + allowed, and it must be at the start
+        // - Must have at least 10 digits
+        if (!preg_match('/^\+?[0-9]{10,}$/', $cleanedNumber)) {
             return [
                 'success' => false,
-                'message' => 'Invalid phone number'
+                'message' => 'Invalid phone number format. Please use international format (e.g., +1234567890)'
             ];
         }
+        
+        // Use the cleaned number
+        $phoneNumber = $cleanedNumber;
         
         // Check if user exists and email is verified
         $stmt = $this->db->prepare("
@@ -218,8 +228,8 @@ class UserRegistration {
             ];
         }
         
-        // Generate 6-digit OTP
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        // Generate 6-digit OTP (range 100000-999999 to avoid leading zeros)
+        $otp = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
         $expires = date('Y-m-d H:i:s', strtotime('+10 minutes'));
         
         // Update user with phone number and OTP

@@ -32,6 +32,9 @@ $userReg = new UserRegistration($db, $config);
 // Initialize database tables (only needed once)
 $userReg->initializeDatabase();
 
+// Start session before using session variables
+session_start();
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -44,8 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $_SESSION['registration_error'] = $result['message'];
     }
 }
-
-session_start();
 ?>
 
 <!DOCTYPE html>
