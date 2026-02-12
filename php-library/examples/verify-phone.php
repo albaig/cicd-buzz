@@ -5,6 +5,8 @@
  * This example handles phone number verification with OTP
  */
 
+session_start();
+
 // Include the library
 require_once __DIR__ . '/../src/UserRegistration.php';
 
@@ -28,8 +30,6 @@ try {
 
 // Initialize UserRegistration
 $userReg = new UserRegistration($db, $config);
-
-session_start();
 
 // Get user ID from session or URL
 $userId = $_SESSION['user_id'] ?? $_GET['user_id'] ?? null;

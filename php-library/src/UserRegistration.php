@@ -229,7 +229,7 @@ class UserRegistration {
         }
         
         // Generate 6-digit OTP (range 100000-999999 to avoid leading zeros)
-        $otp = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+        $otp = (string) random_int(100000, 999999);
         $expires = date('Y-m-d H:i:s', strtotime('+10 minutes'));
         
         // Update user with phone number and OTP

@@ -5,6 +5,8 @@
  * This example handles email verification via token
  */
 
+session_start();
+
 // Include the library
 require_once __DIR__ . '/../src/UserRegistration.php';
 
@@ -28,8 +30,6 @@ try {
 
 // Initialize UserRegistration
 $userReg = new UserRegistration($db, $config);
-
-session_start();
 
 // Handle email verification
 $message = '';
